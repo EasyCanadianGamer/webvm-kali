@@ -1,21 +1,25 @@
 FROM kalilinux/kali-rolling
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Update & install packages
+# Update and install a few essential packages
 RUN apt-get update && apt-get -y upgrade && \
-    apt-get install -y apt-utils beef bsdgames bsdmainutils ca-certificates clang \
-    cowsay cpio cron curl dmidecode dmsetup g++ gcc gdbm-l10n git  \
-    hexedit ifupdown init logrotate lsb-base lshw lua5.0 luajit lynx make \
-    nano netbase nodejs openssl procps python3 python3-cryptography \
-    python3-jinja2 python3-numpy python3-pandas python3-pip python3-scipy \
-    python3-six python3-yaml readline-common rsyslog ruby sensible-utils \
-    ssh systemd systemd-sysv tasksel tasksel-data udev vim wget whiptail \
-    xxd iptables isc-dhcp-client isc-dhcp-common kmod less netcat-openbsd
+    apt-get install -y \
+    curl \
+    git \
+    vim \
+    net-tools \
+    iputils-ping \
+    python3 \
+    python3-pip \
+    nano \
+    wget \
+    && apt-get clean
 
-# Create user and copy example directory
-RUN useradd -m user && echo "user:Beta2023!" | chpasswd
-COPY --chown=user:user ./examples /home/user/examples
-RUN chmod -R +x /home/user/examples/lua
-RUN echo 'root:Beta2023!' | chpasswd
+# Create a user and set password
+RUN useradd -m user && echo "user:password" | chpasswd
+RUN echo "root:password" | chpasswd
 
-CMD [ "/bin/bash" ]
+# Optional: Copy examples if you have them
+# COPY --chown=user:user ./examples /home/user/examples
+
+CMD ["/bin/bash"]
